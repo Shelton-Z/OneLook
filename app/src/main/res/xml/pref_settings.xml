@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.shelton.onelook.widget.PreferenceHead android:key="configHead" />
+    <com.shelton.onelook.widget.MingPreferenceCategory>
+        <com.shelton.onelook.widget.PreferenceWithRightIcon
+            android:key="flow"
+            app:left_title="流量消耗"
+            app:type="1" />
+        <MultiSelectListPreference
+            android:dialogTitle="清除浏览记录"
+            android:entries="@array/cache_name"
+            android:entryValues="@array/cache_value"
+            android:key="clear_cache"
+            android:summary="点击选择清除项"
+            android:title="清除浏览记录" />
+
+    </com.shelton.onelook.widget.MingPreferenceCategory>
+    <com.shelton.onelook.widget.MingPreferenceCategory>
+        <ListPreference
+            android:defaultValue="#474747"
+            android:dialogTitle="选择一项"
+            android:entries="@array/color_name"
+            android:entryValues="@array/color_value"
+            android:key="theme_color"
+            android:title="更换主题色" />
+        <ListPreference
+            android:defaultValue="100"
+            android:dialogTitle="选择一项"
+            android:entries="@array/size_name"
+            android:entryValues="@array/size_value"
+            android:key="text_size"
+            android:title="字体调整" />
+    </com.shelton.onelook.widget.MingPreferenceCategory>
+    <com.shelton.onelook.widget.MingPreferenceCategory android:title="">
+        <Preference
+            android:key="restore_default"
+            android:title="恢复默认" />
+    </com.shelton.onelook.widget.MingPreferenceCategory>
+</PreferenceScreen>

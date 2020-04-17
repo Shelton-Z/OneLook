@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/history_select_more_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/history_confirm_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除" />
+
+        <Button
+            android:id="@+id/history_cancel_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="取消" />
+    </RelativeLayout>
+
+    <com.shelton.onelook.widget.HistoryListView
+        android:id="@+id/history_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/history_select_more_bar"
+        android:divider="@null" />
+
+    <ImageView
+        android:id="@+id/empty_history"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/delete_background"
+        android:src="@android:drawable/ic_menu_delete" />
+</RelativeLayout>
