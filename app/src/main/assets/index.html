@@ -1,289 +1,126 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
-<link rel="apple-touch-icon" sizes="72x72" href="http://img4.46644.com/static/images/home.png" />
-<link rel="apple-touch-icon" sizes="114x114" href="http://img4.46644.com/static/images/home114.png" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-<title>46644网址导航</title>
-<meta name="description" content="46644轻应用为用户提供实用便民工具，涵盖生活中的各个方面，方便快捷。" />
-<meta name="keywords" content="46644,轻应用,笑话,游戏,图片" />
-<link rel="stylesheet" type="text/css" href="static/css/bootstrap.css"/>
-<link rel="stylesheet" type="text/css" href="static/css/weixin.css"/>
-<link rel="stylesheet" type="text/css" href="tool/static/css/weixin.css" />
-<script type="text/javascript" src="static/js/zepto.js"></script>
-<script type="text/javascript" src="static/js/common3.js"></script>
+    <title>One Look</title>
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"
+          name="viewport"/>
+    <meta charset="utf-8"/>
 </head>
-<body>
-<div id="top">
-<div id="logo"><a href="http://m.46644.com/">首页</a></div>
-<div id="logoright">
-<div id="lrleft"></div>
-<div id="lrright"></div>
-</div>
-</div>
-<div id="nav">
-<ul><li><a href="index.html">首页</a></li><li><a href="tool/index.html">工具</a></li><li><a href="http://gou.46644.com/">购物</a></li><li><a href="game/index.html">游戏</a></li></ul>
-</div>
-<ul id="famoussite" class="mtop10 wid">  
-<li><a href="http://sina.cn/?vt=4" target="_blank">新浪</a></li>
-<li><a href="http://info.3g.qq.com/g/" target="_blank">腾讯</a></li>
-<li><a href="http://3g.163.com/touch/" target="_blank">网易</a></li>
-<li><a href="http://m.kaixinhui.com" target="_blank">开心汇</a></li>
-<li><a href="http://i.ifeng.com/?vt=5" target="_blank">凤凰</a></li>
-<li><a href="http://m.taobao.com/" target="_blank">淘宝</a></li>
-<li><a href="http://m.weibo.cn/" target="_blank">新浪微博</a></li>
-<li><a href="http://e.91.com/" target="_blank">91</a></li>
-<li><a href="http://pt.3g.qq.com/s?aid=nLoginqz" target="_blank">QQ空间</a></li>
-<li><a href="http://m.lefeng.com/index.php/home/index/aid/4850/cid2/29504/unistr/46644" target="_blank">乐蜂</a></li>
-<li><a href="http://6051.yoyuan.com.cn/?from=6051" target="_blank">有缘</a></li>
-<li><a href="http://m.mxiazg.com/a.aspx?a=16165a26417" target="_blank">芒购</a></li>
-<li><a href="http://121.201.107.71:9016/a.aspx?a=15688a26415" target="_blank">买卖</a></li>
-<li><a href="https://mail.qq.com/cgi-bin/loginpage" target="_blank">邮箱</a></li>
-<li><a href="http://ai.m.taobao.com/bu.html?back=true&id=6&pid=mm_13331897_3044188_11268553" target="_blank">充值</a></li>
-</ul>
-<div class="clear"></div>
-<div class="wid mtop5 mcenter"><a href="" style="display:none;"><img src="/static/images/46644banner.jpg" /></a></div>
 
-<div id="search" class="wid">
-<form name="f1" id="f1" action="http://m.baidu.com/s" method="get" target="_blank">
-<input id="bdword" type="text" name="word" x-webkit-speech placeholder="用 百度网页 搜索" />
-<input type="hidden" name="setype" id="setype" value="baidu" />
-<input type="submit" name="baidubtn" id="baidubtn" value="搜索" />
-</form>
-<script type="text/javascript" src="static/js/search.js"></script>
+<style>
+#back_img{
+    width: 100px;
+    height: 100px;
+    background-image: url(image1.jpg);
+}
+#mean{
+    text-align: center;
+    position: relative;
+    left: -20px;
+    top: 12px;
+
+}
+#mean ul{
+    margin: 10px;
+}
+#mean a{
+	text-decoration: none;
+    color: #c58814a8;
+    font-size: 17px;
+    margin: 16px;
+}
+#mean ul>div{
+    display: inline-block;
+    width: 64px;
+    height: 46px;
+    background: #60eadf61;
+    border: 1px solid #ff980099;
+    border-radius: 36px;
+    box-shadow: 5px 5px 5px palevioletred;
+}
+#lunbo{
+    text-align: center;
+}
+#lunbo p{
+    text-align: center;
+    font-size: 25px;
+    color: cadetblue;
+    font-family: fantasy;
+}
+
+.imgBox{
+    border-top: 2px solid cadetblue;
+    width: 200px;
+    height: 150px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.imgBox img{
+    text-align: center;
+    width: 200px;
+    height: 150px;
+    margin: 0 auto;
+    padding-top: 10px;
+}
+
+.img1{
+    display: block;
+}
+
+.img2{
+    display: none;
+}
+.img3{
+    display: none;
+}
+
+
+
+</style>
+
+<body background="background.jpg">
+<div id="lunbo">
+    <p>绁炰竴鏍风殑灏戝勾鍛�锛�</p>
+    <p>姣忓ぉ閮芥槸缇庣編鐨勶紒</p>
+    <div class="imgBox">
+        <img alt="1" class="img-slide img1" src="image1.jpg">
+        <img alt="2" class="img-slide img2" src="image2.jpg">
+        <img alt="3" class="img-slide img3" src="image3.jpg">
+    </div>
 </div>
-<div class="icbox">
-<h2 id="icbnews">新闻资讯 </h2>
-<div class="wid mtop5 mcenter"></div>
-<dl>
-<dt><a href="news/">[新闻]</a></dt>
-<dd><a href="http://wap.huanqiu.com"  target="_blank">环球</a></dd>
-<dd><a href="http://wap.cctv.com"  target="_blank">央视</a></dd>
-<dd><a href="http://m.news.cn/"  target="_blank">新华</a></dd>
-<dd><a href="http://wap.people.com.cn"  target="_blank">人民</a></dd>
-<dd><a href="http://wapzk.net/?ff=1092721"  target="_blank">掌酷</a></dd>
-</dl>  
-<dl>
-<dt><a href="car/">[汽车]</a></dt>
-<dd><a href="http://3g.163.com/auto/"  target="_blank">网易</a></dd>
-<dd><a href="http://wap.sohu.com/auto/?nid=30&v=4"  target="_blank">搜狐</a></dd>
-<dd><a href="http://3g.iautos.cn/"  target="_blank">车网</a></dd>
-<dd><a href="http://m.autohome.com.cn/"  target="_blank">之家</a></dd>
-<dd><a href="http://m.jxedt.com/"  target="_blank">一点</a></dd>
-</dl>  
-<dl>
-<dt><a href="junshi/">[军事]</a></dt>
-<dd><a href="http://m.tiexue.net/Touch/"  target="_blank">铁血</a></dd>
-<dd><a href="http://wap.huanqiu.com/pd.html?id=23&v=3"  target="_blank">环球</a></dd>
-<dd><a href="http://3g.china.com/mili/"  target="_blank">中华</a></dd>
-<dd><a href="http://wap.sohu.com/military/?nid=71&v=4"  target="_blank">搜狐</a></dd>
-<dd><a href="http://3g.163.com/news/special/00010360/junshiindex.html"  target="_blank">网易</a></dd>
-</dl>  
-<dl>
-<dt><a href="caijing/">[财经]</a></dt>
-<dd><a href="http://i.ifeng.com/finance/financei"  target="_blank">凤凰</a></dd>
-<dd><a href="http://m.sohu.com/c/5/"  target="_blank">搜狐</a></dd>
-<dd><a href="http://wap.hexun.com"  target="_blank">和讯</a></dd>
-<dd><a href="http://wapyd.hexin.cn/"  target="_blank">同花</a></dd>
-<dd><a href="http://3g.tzt.cn/"  target="_blank">投资</a></dd>
-</dl>  
-<dl>
-<dt><a href="tiyu/">[体育]</a></dt>
-<dd><a href="http://sports.sina.cn/?vt=3"  target="_blank">新浪</a></dd>
-<dd><a href="http://wap.sohu.com/sports/?pagetype=4"  target="_blank">搜狐</a></dd>
-<dd><a href="http://m.hupu.com/"  target="_blank">虎扑</a></dd>
-<dd><a href="http://sports.3g.cn"  target="_blank">3 G</a></dd>
-<dd><a href="http://3g.163.com/touch/sports"  target="_blank">网易</a></dd>
-</dl>  
+
+<div id="mean">
+    <ul>
+        <div><a href="https://www.jd.com/">浜笢</a></div>
+        <div><a href="https://www.taobao.com/">娣樺疂</a></div>
+        <div><a href="https://2.taobao.com/">鍜搁奔</a></div>
+    </ul>
+    <ul>
+        <div><a href="https://www.zhihu.com/">鐭ヤ箮</a></div>
+        <div><a href="https://weibo.com/">寰崥</a></div>
+        <div><a href="https://tieba.baidu.com/">璐村惂</a></div>
+    </ul>
+    <ul>
+        <div><a href="https://www.bilibili.com/">鍝斿摡</a></div>
+        <div><a href="https://www.huya.com/">铏庣墮</a></div>
+        <div><a href="https://www.douyu.com/">鏂楅奔</a></div>
+    </ul>
 </div>
-<div class="icbox">
-<h2 id="icbvideo">影音阅读 </h2>
-<div class="wid mtop5 mcenter"></div>
-<dl>
-<dt><a href="xiaoshuo/">[小说]</a></dt>
-<dd><a href="http://ad2.easou.com:8080/j10ad/ea2.jsp?channel=0&cid=bcgn3508_47294_D_1"  target="_blank">宜搜</a></dd>
-<dd><a href="http://m.qisuu.cn/"  target="_blank">免费</a></dd>
-<dd><a href="http://wap.kanshu.com/index?cnl=46644&s=1"  target="_blank">看书</a></dd>
-<dd><a href="http://wap.zhulang.com/"  target="_blank">逐浪</a></dd>
-<dd><a href="http://m.xs8.cn"  target="_blank">言情</a></dd>
-</dl>  
-<dl>
-<dt><a href="video/">[视频]</a></dt>
-<dd><a href="http://m.iqiyi.com/?msrc=1_7_1"  target="_blank">奇艺</a></dd>
-<dd><a href="http://m.letv.com/" style="color:#e60012;" target="_blank">乐视</a></dd>
-<dd><a href="http://3g.youku.com/"  target="_blank">优酷</a></dd>
-<dd><a href="http://m.tv.sohu.com/"  target="_blank">搜狐</a></dd>
-<dd><a href="http://v.qq.com/"  target="_blank">腾讯</a></dd>
-</dl>  
-<dl>
-<dt><a href="pic/">[图片]</a></dt>
-<dd><a href="http://m.poco.cn/"  target="_blank">图库</a></dd>
-<dd><a href="http://tu.easou.com/?idx=1&fr=9.1.3.4&offline=1&esid=VQS05L0ZHMxevjDjW3zEOQO2zoJMSoz_O&wver=t"  target="_blank">宜搜</a></dd>
-<dd><a href="http://m.hmpic.com/index.asp?v=3"  target="_blank">女图</a></dd>
-<dd><a href="http://wap.sohu.com/pic/"  target="_blank">搜狐</a></dd>
-<dd><a href="http://yicha.cn/union/u.jsp?p=i&site=2145960069&key="  target="_blank">美图</a></dd>
-</dl>  
-<dl>
-<dt><a href="music/">[音乐]</a></dt>
-<dd><a href="http://m.kugou.com/"  target="_blank">酷狗</a></dd>
-<dd><a href="http://music.wap.soso.com/"  target="_blank">搜搜</a></dd>
-<dd><a href="http://m.kuwo.cn/"  target="_blank">酷我</a></dd>
-<dd><a href="http://music.baidu.com/?guide=1"  target="_blank">百度</a></dd>
-<dd><a href="http://hhtdj.com/link/gourl.aspx?id=1000_887"  target="_blank">好听</a></dd>
-</dl>  
-</div>
-<div class="icbox">
-<h2 id="icbmall">时尚购物 <a href="http://121.201.107.71:9016/a.aspx?a=15688a26415" target="_blank">【限时抢购】苹果5S仅999元只售一天！</a></h2>
-<div class="wid mtop5 mcenter"></div>
-<dl>
-<dt><a href="mall/">[购物]</a></dt>
-<dd><a href="http://m.vancl.com/?source=lala0728&sourcesuninfo=ad-0-4-0-0-2" style="color:#ff0000;" target="_blank">凡客</a></dd>
-<dd><a href="http://121.201.107.71:9016/a.aspx?a=15688a26415"  target="_blank">手机</a></dd>
-<dd><a href="http://ai.m.taobao.com/bu.html?id=2&pid=mm_13331897_3044188_11268553"  target="_blank">聚划算</a></dd>
-<dd><a href="http://ai.m.taobao.com/bu.html?id=1&pid=mm_13331897_3044188_11268553"  target="_blank">特价</a></dd>
-<dd><a href="http://ai.m.taobao.com/channel.html?id=1&pid=mm_13331897_3044188_11268553"  target="_blank">女装</a></dd>
-</dl>  
-<dl>
-<dt><a href="tuan/">[团购]</a></dt>
-<dd><a href=""  target="_blank">点评</a></dd>
-<dd><a href="http://m.lashou.com/?union_pid=511873809&union_sign=55;3788"  target="_blank">拉手</a></dd>
-<dd><a href="http://r.union.meituan.com/link/ze0csw"  target="_blank">美团</a></dd>
-<dd><a href="http://www.nuomi.com/"  target="_blank">糯米</a></dd>
-<dd><a href="http://p.yiqifa.com/n?k=2mLErnDSWNKSrI6H2mLErI6HWNRO6EBH6lws6NROrntL6ltm6cLErZyH2mqwWNj7W53LWmqW5Js95KbH&e=46644&t=http://wap.pztuan.com"  target="_blank">品质团</a></dd>
-</dl>  
-</div>
-<div class="icbox">
-<h2 id="icbyule">休闲娱乐 </h2>
-<div class="wid mtop5 mcenter"></div>
-<dl>
-<dt><a href="xiaohua/">[笑话]</a></dt>
-<dd><a href="http://m.kaixinhui.com/"  target="_blank">开心</a></dd>
-<dd><a href="http://m.qiushibaike.com/"  target="_blank">糗百</a></dd>
-<dd><a href="http://m.pengfu.com"  target="_blank">捧腹</a></dd>
-<dd><a href="http://3g.laifu.org/get.asp?get=4899"  target="_blank">来福</a></dd>
-<dd><a href="http://wap.jokeji.cn/"  target="_blank">笑话</a></dd>
-</dl>  
-<dl>
-<dt><a href="youxi/">[游戏]</a></dt>
-<dd><a href="http://m.h5le.com/?width=320" style="color:#F98F2E;" target="_blank">游乐</a></dd>
-<dd><a href="http://www.yi588.com/"  target="_blank">云游</a></dd>
-<dd><a href="http://www.duopao.com/?utm_source=46644&utm_medium=daohang&utm_campaign=duopao_promo"  target="_blank">多泡</a></dd>
-<dd><a href="http://g.easou.com/index.e?esid=YwXaHWDKp3A"  target="_blank">宜搜</a></dd>
-<dd><a href="http://baina.com/"  target="_blank">百纳</a></dd>
-</dl>  
-<dl>
-<dt><a href="soft/">[软件]</a></dt>
-<dd><a href="http://m.46644.com/app/android/index320.html"  target="_blank">推荐</a></dd>
-<dd><a href="/app/iphone/index320.html"  target="_blank">推荐</a></dd>
-<dd><a href="/app/iphone/common320.html"  target="_blank">必备</a></dd>
-<dd><a href="/app/android/common320.html"  target="_blank">必备</a></dd>
-<dd><a href="/app/iphone/index320.html"  target="_blank">排行</a></dd>
-</dl>  
-<dl>
-<dt><a href="bbs/">[社区]</a></dt>
-<dd><a href="http://3g.tianya.cn"  target="_blank">天涯</a></dd>
-<dd><a href="http://m.mop.com/?version=4"  target="_blank">猫扑</a></dd>
-<dd><a href="http://m.renren.com" style="color:#005aad;" target="_blank">人人</a></dd>
-<dd><a href="http://z.qq.com" style="color:#f5be3f;" target="_blank">Q Q</a></dd>
-<dd><a href="http://wap.19lou.com"  target="_blank">19楼</a></dd>
-</dl>  
-<dl>
-<dt><a href="dongman/">[动漫]</a></dt>
-<dd><a href="http://m.baozoumanhua.com/"  target="_blank">暴走</a></dd>
-<dd><a href="http://wap.2kk.mobi/"  target="_blank">爱漫</a></dd>
-<dd><a href="http://wap.jdmh.cn/"  target="_blank">漫画</a></dd>
-<dd><a href="http://yicha.cn/union/u.jsp?p=dm&site=2145960069&key="  target="_blank">易查</a></dd>
-<dd><a href="http://bxdm.com.cn/link/gourl.aspx?id=1299036_146513"  target="_blank">暴漫</a></dd>
-</dl>  
-</div>
-<div class="icbox">
-<h2 id="icblife">生活服务 </h2>
-<div class="wid mtop5 mcenter"></div>
-<dl>
-<dt><a href="life/">[生活]</a></dt>
-<dd><a href="http://m.zhuna.cn/?agent_id=2763582"  target="_blank">住宿</a></dd>
-<dd><a href="http://p.yiqifa.com/n?k=2mLErnDq6l3LrI6H2mLErJtq1BP7kcLq6l376cLm1NKs6lMHWlDe6NKLrI6HkQLErnMw1nBy3O2OrIW-&e=46644&t=http://m.tujia.com"  target="_blank">途家</a></dd>
-<dd><a href="http://6051.yoyuan.com.cn/?from=6051"  target="_blank">相亲</a></dd>
-<dd><a href="http://wap.118114.cn/v2/1/home/index?fr=46644.com"  target="_blank">号百</a></dd>
-<dd><a href="http://m.fang.com/?sf_source=bd_m.46644"  target="_blank">搜房</a></dd>
-</dl>  
-<dl>
-<dt><a href="love/">[婚恋]</a></dt>
-<dd><a href="http://6051.yoyuan.com.cn/?from=6051"  target="_blank">有缘</a></dd>
-<dd><a href="http://3g.jiayuan.com"  target="_blank">佳缘</a></dd>
-<dd><a href="http://3g.yuehui.163.com/mobile/"  target="_blank">同城</a></dd>
-<dd><a href="http://wap.jstv.com/fcwr/"  target="_blank">非诚</a></dd>
-<dd><a href="http://3g.baihe.com"  target="_blank">百合</a></dd>
-</dl>  
-<dl>
-<dt><a href="lvyou/">[旅游]</a></dt>
-<dd><a href="http://wap.yikuaiqu.com/?s=46644"  target="_blank">门票</a></dd>
-<dd><a href="http://m.zhuna.cn/?agent_id=2763582"  target="_blank">酒店</a></dd>
-<dd><a href="http://union.elong.com/r/hotel/2000000001200413385"  target="_blank">艺龙</a></dd>
-<dd><a href="http://p.yiqifa.com/n?k=2mLErnWeWNterI6H2mLErI6HWNRlWnBH6lws6NROrnRqWZqO5n6gUmBHkQLErJ3m1NjmWJ3erIW-&e=46644&t=http://m.ctrip.com/html5/index.html"  target="_blank">携程</a></dd>
-<dd><a href="http://p.yiqifa.com/n?k=2mLErnDSWlKmrI6H2mLErI6HWNRO6EPH6lws6NROrnzLWEt7rtsL6c4lCQqerI6H3l3m3E2l1NbH2L--&e=46644&t=http://m.lvmama.com" style="color:#e51785;" target="_blank">驴妈</a></dd>
-</dl>  
-<dl>
-<dt><a href="zhaopin/">[招聘]</a></dt>
-<dd><a href="http://3g.51job.com/"  target="_blank">无忧</a></dd>
-<dd><a href="http://wap.zhaopin.com/"  target="_blank">智联</a></dd>
-<dd><a href="http://wap.ganji.com/"  target="_blank">赶集</a></dd>
-<dd><a href="http://m.58.com"  target="_blank">5 8</a></dd>
-<dd><a href="http://m.lietou.com/"  target="_blank">猎聘</a></dd>
-</dl>  
-</div>
-<div class="icbox">
-<h2 id="icbtuan">工具 </h2>
-<div class="wid mtop5 mcenter"></div>
-<dl>
-<dt><a href="tool/index.html">[常用]</a></dt>
-<dd><a href="http://m.46644.com/tianqi/"  target="_blank">天气</a></dd>
-<dd><a href="http://m.46644.com/tool/calendar/"  target="_blank">万年历</a></dd>
-<dd><a href="http://m.46644.com/express/"  target="_blank">快递</a></dd>
-<dd><a href="http://m.46644.com/tool/idcard/"  target="_blank">身份证</a></dd>
-<dd><a href="http://m.46644.com/tool/zipcode/"  target="_blank">邮编</a></dd>
-</dl>  
-<dl>
-<dt><a href="tool/index.html">[旅行]</a></dt>
-<dd><a href="http://m.46644.com/bus/"  target="_blank">长途</a></dd>
-<dd><a href="http://m.46644.com/tool/flight/"  target="_blank">航班</a></dd>
-<dd><a href="http://m.46644.com/tool/transit/"  target="_blank">公交</a></dd>
-<dd><a href="http://m.46644.com/train/"  target="_blank">火车</a></dd>
-<dd><a href="http://m.46644.com/tool/tel/"  target="_blank">电话</a></dd>
-</dl>
-<dl>
-<dt><a href="tool/index.html">[教育]</a></dt>
-<dd><a href="http://m.46644.com/lunyu/"  target="_blank">论语</a></dd>
-<dd><a href="http://m.46644.com/zhuangzi/"  target="_blank">庄子</a></dd>
-<dd><a href="http://m.46644.com/sanzijing/"  target="_blank">三字经</a></dd>
-<dd><a href="http://m.46644.com/zidian/"  target="_blank">新华字典</a></dd>
-<dd><a href="http://m.46644.com/tangshi/"  target="_blank">唐诗</a></dd>
-</dl> 
-<dl>
-<dt><a href="tool/index.html">[算命]</a></dt>
-<dd><a href="http://m.46644.com/hehun/"  target="_blank">八字</a></dd>
-<dd><a href="http://m.46644.com/tianhou/"  target="_blank">天后</a></dd>
-<dd><a href="http://m.46644.com/suanming/"  target="_blank">算命大全</a></dd>
-<dd><a href="http://m.46644.com/zhiwen/"  target="_blank">指纹</a></dd>
-<dd><a href="http://m.46644.com/tool/zhuge/"  target="_blank">诸葛</a></dd>
-</dl> 
-</div>
-<script type="text/javascript" src="/static/js/botnavadwx.js?v=20140805" charset="gbk"></script>
-<div class="wid mtop10 indexbox simple" id="xiaohua"><ul><li><a href="http://kaixinhui.net/detail-35945.html">一张图告诉你女司机的恐怖！</a></li><li><a href="http://kaixinhui.net/detail-35946.html">一天商人来到一个小村子，看见一个农民在打</a></li><li><a href="http://kaixinhui.net/detail-35947.html">老妈打电话给我：“晚上吃饭了吗？”我没声</a></li></ul></div>
-<div id="foot" class="wid"> 
-<p>合作/定制QQ：1225976870</p>
-<p><a href="http://m.46644.com/">m.46644.com</a> 2011-2014 版权所有 </p>
-</div>
+</body>
 <script type="text/javascript">
-var wjs = (typeof(Xuan.HttpRequest) == 'undefined') ? '1' : '';
-document.write('<script type="text\/javascript" src="\/static\/js\/foot'+ wjs +'.js"><\/script>');
+	var index=0;
+    //鏀瑰彉鍥剧墖
+    function ChangeImg() {
+        index++;
+        var a=document.getElementsByClassName("img-slide");
+        if(index>=a.length) index=0;
+        for(var i=0;i<a.length;i++){
+            a[i].style.display='none';
+        }
+        a[index].style.display='block';
+    }
+    //璁剧疆瀹氭椂鍣紝姣忛殧涓ょ鍒囨崲涓�寮犲浘鐗�
+    setInterval(ChangeImg,2000);
 </script>
-<script type="text/javascript">
-var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="//hm.baidu.com/hm.js?9714abdbf79a099b7da2443fd41589b9";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s)})();
-var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-7161351-6']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src='http://www.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s)})();
-document.onclick=function(e){e=e||event;var el=e.target||e.srcElement;if(el.parentNode.tagName=='A')el=el.parentNode;if(el.tagName=='A'&&(el.href).indexOf('http')!=-1&&(el.href).indexOf('46644.com')==-1){_gaq.push(['_trackEvent','Link','Outbound',el.href])}}
-</script></body>
 </html>

@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
@@ -22,7 +21,6 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.shelton.onelook.DaintyApplication;
 import com.shelton.onelook.R;
 import com.shelton.onelook.adapter.PopupMenuListAdapter;
 import com.shelton.onelook.bean.WebFragmentLoadBean;
@@ -31,23 +29,24 @@ import com.shelton.onelook.task.ResolveDownloadUrlTask;
 import com.shelton.onelook.util.DaintyDBHelper;
 import com.shelton.onelook.util.MyUtil;
 import com.shelton.onelook.widget.MingWebView;
-import com.tencent.smtt.sdk.DownloadListener;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WebViewFragment extends Fragment {
-    public final static int LOAD_IN_NEW_WINDOW = 0;
-    public final static int LOAD_IN_BACKGROUND = 1;
+    final static int LOAD_IN_NEW_WINDOW = 0;
+    private final static int LOAD_IN_BACKGROUND = 1;
 
     private Bundle bundle;
     private MingWebView webView;
@@ -62,19 +61,19 @@ public class WebViewFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public WebViewFragment(Bundle savedInstanceState) {
+    WebViewFragment(Bundle savedInstanceState) {
         this(savedInstanceState, null);
     }
 
     @SuppressLint("ValidFragment")
-    public WebViewFragment(Bundle savedInstanceState, String url) {
+    WebViewFragment(Bundle savedInstanceState, String url) {
         bundle = savedInstanceState;  //为空表示是用户手动添加标签页
         if (url != null)
             this.url = url;
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         webView.saveState(outState);
     }
@@ -82,7 +81,7 @@ public class WebViewFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (cache == null) {
             cache = inflater.inflate(R.layout.webview_fragment, container, false);
@@ -133,56 +132,47 @@ public class WebViewFragment extends Fragment {
                     super.onReceivedError(view, errorCode, description, failingUrl);
                 }
             });
-            View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    WebView.HitTestResult result = webView.getHitTestResult();
-                    int resultType = result.getType();
-                    extra = result.getExtra();
-                    Log.d("Ming", resultType + "");
-                    boolean showCustomPopup = false;
+            View.OnLongClickListener onLongClickListener = v -> {
+                WebView.HitTestResult result = webView.getHitTestResult();
+                int resultType = result.getType();
+                extra = result.getExtra();
+                Log.d("Ming", resultType + "");
+                boolean showCustomPopup = false;
 
-                    switch (resultType) {
-                        case WebView.HitTestResult.SRC_ANCHOR_TYPE:
-                            initLoadingWebQuickAction();
-                            showCustomPopup = true;
-                            break;
-                        case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE:
-                        case WebView.HitTestResult.IMAGE_TYPE:
-                            initImageQuickAction();
-                            showCustomPopup = true;
-                            break;
-                    }
-                    if (showCustomPopup) {
-                        Point point = new Point();
-                        getActivity().getWindowManager().getDefaultDisplay().getSize(point);
-                        int xOff = (touchPointX + mWidth) > point.x ? touchPointX - mWidth : touchPointX;
-                        int yOff = (touchPointY + mHeight) > point.y ? touchPointY - mHeight : touchPointY;
-                        quickAction.showAtLocation(v, Gravity.TOP | Gravity.START, xOff, yOff);
-                        return true;
-                    }
-                    return false;
+                switch (resultType) {
+                    case WebView.HitTestResult.SRC_ANCHOR_TYPE:
+                        initLoadingWebQuickAction();
+                        showCustomPopup = true;
+                        break;
+                    case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE:
+                    case WebView.HitTestResult.IMAGE_TYPE:
+                        initImageQuickAction();
+                        showCustomPopup = true;
+                        break;
                 }
+                if (showCustomPopup) {
+                    Point point = new Point();
+                    Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getSize(point);
+                    int xOff = (touchPointX + mWidth) > point.x ? touchPointX - mWidth : touchPointX;
+                    int yOff = (touchPointY + mHeight) > point.y ? touchPointY - mHeight : touchPointY;
+                    quickAction.showAtLocation(v, Gravity.TOP | Gravity.START, xOff, yOff);
+                    return true;
+                }
+                return false;
             };
 
             webView.setOnLongClickListener(onLongClickListener);
-            webView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    touchPointX = (int) event.getRawX();
-                    touchPointY = (int) event.getRawY();
-                    return false;
-                }
+            webView.setOnTouchListener((v, event) -> {
+                touchPointX = (int) event.getRawX();
+                touchPointY = (int) event.getRawY();
+                return false;
             });
 
-            webView.setDownloadListener(new DownloadListener() {
-                @Override
-                public void onDownloadStart(String s, String s1, String s2, String s3, long l) {
-                    if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        Toast.makeText(getActivity(), "请检查手机SD卡", Toast.LENGTH_SHORT).show();
-                    } else {
-                        new ResolveDownloadUrlTask(getActivity(), cache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, s);
-                    }
+            webView.setDownloadListener((s, s1, s2, s3, l) -> {
+                if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                    Toast.makeText(getActivity(), "请检查手机SD卡", Toast.LENGTH_SHORT).show();
+                } else {
+                    new ResolveDownloadUrlTask(getActivity(), cache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, s);
                 }
             });
             if (bundle != null)
@@ -202,7 +192,7 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        DaintyApplication.getRefWatcher(getActivity()).watch(this);
+//        DaintyApplication.getRefWatcher(getActivity()).watch(this);
     }
 
 
@@ -220,7 +210,7 @@ public class WebViewFragment extends Fragment {
         setting.setSupportMultipleWindows(false);
 
         setting.setGeolocationEnabled(true);   //允许启用地理定位
-        setting.setGeolocationDatabasePath(getActivity().getDir("geolocation", 0).getPath());
+        setting.setGeolocationDatabasePath(Objects.requireNonNull(getActivity()).getDir("geolocation", 0).getPath());
         setting.setSaveFormData(true);  //支持保存自动填充的表单数据
         setting.setDomStorageEnabled(true);  //支持DOM缓存
         setting.setDatabaseEnabled(true);
@@ -230,7 +220,7 @@ public class WebViewFragment extends Fragment {
 
         // 全屏显示
         setting.setUseWideViewPort(true);
-        setting.setTextZoom(Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("text_size", "100")));
+        setting.setTextZoom(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("text_size", "100")));
 
     }
 
@@ -259,7 +249,7 @@ public class WebViewFragment extends Fragment {
         }
     }
 
-    public MingWebView getInnerWebView() {
+    MingWebView getInnerWebView() {
         return webView;
     }
 
@@ -277,25 +267,22 @@ public class WebViewFragment extends Fragment {
         data.add("复制链接");
         popupMenuList = pop_layout.findViewById(R.id.popup_menu_list);
         PopupMenuListAdapter adapter = new PopupMenuListAdapter(getActivity(), data);
-        adapter.setOnItemClickListener(new PopupMenuListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                quickAction.dismiss();
-                switch (position) {
-                    case 0:
-                        EventBus.getDefault().post(new WebFragmentLoadBean(LOAD_IN_NEW_WINDOW, extra));
-                        break;
-                    case 1:
-                        EventBus.getDefault().post(new WebFragmentLoadBean(LOAD_IN_BACKGROUND, extra));
-                        break;
-                    case 2:
-                        copyToClipboard();
-                        break;
-                }
+        adapter.setOnItemClickListener(position -> {
+            quickAction.dismiss();
+            switch (position) {
+                case 0:
+                    EventBus.getDefault().post(new WebFragmentLoadBean(LOAD_IN_NEW_WINDOW, extra));
+                    break;
+                case 1:
+                    EventBus.getDefault().post(new WebFragmentLoadBean(LOAD_IN_BACKGROUND, extra));
+                    break;
+                case 2:
+                    copyToClipboard();
+                    break;
             }
         });
         popupMenuList.setAdapter(adapter);
-        quickAction = new PopupWindow(MyUtil.dip2px(getActivity(), 150), ViewGroup.LayoutParams.WRAP_CONTENT);
+        quickAction = new PopupWindow(MyUtil.dip2px(Objects.requireNonNull(getActivity()), 150), ViewGroup.LayoutParams.WRAP_CONTENT);
         quickAction.setContentView(pop_layout);
         quickAction.setFocusable(true);
         quickAction.setOutsideTouchable(true);
@@ -317,22 +304,19 @@ public class WebViewFragment extends Fragment {
         data.add("复制链接");
         popupMenuList = pop_layout.findViewById(R.id.popup_menu_list);
         PopupMenuListAdapter adapter = new PopupMenuListAdapter(getActivity(), data);
-        adapter.setOnItemClickListener(new PopupMenuListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                quickAction.dismiss();
-                switch (position) {
-                    case 0:
-                        new ImageTask(getContext()).execute(extra);
-                        break;
-                    case 1:
-                        copyToClipboard();
-                        break;
-                }
+        adapter.setOnItemClickListener(position -> {
+            quickAction.dismiss();
+            switch (position) {
+                case 0:
+                    new ImageTask(getContext()).execute(extra);
+                    break;
+                case 1:
+                    copyToClipboard();
+                    break;
             }
         });
         popupMenuList.setAdapter(adapter);
-        quickAction = new PopupWindow(MyUtil.dip2px(getActivity(), 150), ViewGroup.LayoutParams.WRAP_CONTENT);
+        quickAction = new PopupWindow(MyUtil.dip2px(Objects.requireNonNull(getActivity()), 150), ViewGroup.LayoutParams.WRAP_CONTENT);
         quickAction.setContentView(pop_layout);
         quickAction.setFocusable(true);
         quickAction.setOutsideTouchable(true);
@@ -347,7 +331,7 @@ public class WebViewFragment extends Fragment {
     }
 
     private void copyToClipboard() {
-        ClipboardManager cm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager cm = (ClipboardManager) Objects.requireNonNull(getContext()).getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData mClipData = ClipData.newPlainText("copy_link", extra);
         if (cm != null) {
             cm.setPrimaryClip(mClipData);
