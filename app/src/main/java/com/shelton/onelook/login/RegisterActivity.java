@@ -82,7 +82,7 @@ public class RegisterActivity extends SwipeBackActivity implements LoginRegister
                     Toast.makeText(this, "账户或密码不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                dialog.show();
+//                dialog.show();
                 if (type == 0) {
                     presenter.register(etAccount.getText().toString(), etOldPassword.getText()
                             .toString(), etNewPassword.getText().toString());
