@@ -3,80 +3,93 @@
 <head>
     <title>One Look</title>
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"
+          charset="utf-8"
           name="viewport"/>
-    <meta charset="utf-8"/>
+    <script type="text/javascript">
+        var index = 0;
+        //改变图片
+        function ChangeImg(){
+            index++;
+            var a = document.getElementsByClassName("img-slide");
+            if(index >= a.length) index = 0;
+            for(var i=0; i<a.length; i++){
+                a[i].style.display = 'none';
+            }
+            a[index].style.display = 'block';
+        }
+        //设置定时器，每隔两秒切换一张图片
+        setInterval(ChangeImg, 3000);
+
+    </script>
 </head>
 
 <style>
-#back_img{
-    width: 100px;
-    height: 100px;
-    background-image: url(image1.jpg);
-}
-#mean{
-    text-align: center;
-    position: relative;
-    left: -20px;
-    top: 12px;
+    #back_img{
+        width: 100px;
+        height: 100px;
+        background-image: url(image1.jpg);
+    }
+    #mean{
+        text-align: center;
+        position: relative;
+        left: -20px;
+        top: 12px;
 
-}
-#mean ul{
-    margin: 10px;
-}
-#mean a{
-	text-decoration: none;
-    color: #c58814a8;
-    font-size: 17px;
-    margin: 16px;
-}
-#mean ul>div{
-    display: inline-block;
-    width: 64px;
-    height: 46px;
-    background: #60eadf61;
-    border: 1px solid #ff980099;
-    border-radius: 36px;
-    box-shadow: 5px 5px 5px palevioletred;
-}
-#lunbo{
-    text-align: center;
-}
-#lunbo p{
-    text-align: center;
-    font-size: 25px;
-    color: cadetblue;
-    font-family: fantasy;
-}
+    }
+    #mean ul{
+        margin: 10px;
+    }
+    #mean a{
+        text-decoration: none;
+        color: #c58814a8;
+        font-size: 17px;
+        margin: 16px;
+    }
+    #mean ul>div{
+        display: inline-block;
+        width: 64px;
+        height: 46px;
+        background: #60eadf61;
+        border: 1px solid #ff980099;
+        border-radius: 36px;
+        box-shadow: 5px 5px 5px palevioletred;
+    }
+    #lunbo{
+        text-align: center;
+    }
+    #lunbo p{
+        text-align: center;
+        font-size: 25px;
+        color: cadetblue;
+        font-family: fantasy;
+    }
 
-.imgBox{
-    border-top: 2px solid cadetblue;
-    width: 200px;
-    height: 150px;
-    margin: 0 auto;
-    text-align: center;
-}
+    .imgBox{
+        border-top: 2px solid cadetblue;
+        width: 200px;
+        height: 150px;
+        margin: 0 auto;
+        text-align: center;
+    }
 
-.imgBox img{
-    text-align: center;
-    width: 200px;
-    height: 150px;
-    margin: 0 auto;
-    padding-top: 10px;
-}
+    .imgBox img{
+        text-align: center;
+        width: 200px;
+        height: 150px;
+        margin: 0 auto;
+        padding-top: 10px;
+    }
 
-.img1{
-    display: block;
-}
+    .img1{
+        display: block;
+    }
 
-.img2{
-    display: none;
-}
-.img3{
-    display: none;
-}
-
-
-
+    .img2{
+        display: none;
+    }
+    .img3{
+        display: none;
+    }
 </style>
 
 <body background="background.jpg">
@@ -108,19 +121,5 @@
     </ul>
 </div>
 </body>
-<script type="text/javascript">
-	var index=0;
-    //改变图片
-    function ChangeImg() {
-        index++;
-        var a=document.getElementsByClassName("img-slide");
-        if(index>=a.length) index=0;
-        for(var i=0;i<a.length;i++){
-            a[i].style.display='none';
-        }
-        a[index].style.display='block';
-    }
-    //设置定时器，每隔两秒切换一张图片
-    setInterval(ChangeImg,2000);
-</script>
+
 </html>
