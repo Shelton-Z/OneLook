@@ -36,8 +36,8 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            // 输出apk名称为dainty_v1.0_2020-xx-xx_xxxx.apk
-            def fileName = "dainty_${defaultConfig.versionName}_${releaseTime()}.apk"
+            // 输出apk名称为onelook_v1.0_2020-xx-xx_xxxx.apk
+            def fileName = "onelook_${defaultConfig.versionName}_${releaseTime()}.apk"
             outputFileName = fileName
         }
     }

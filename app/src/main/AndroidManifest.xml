@@ -38,13 +38,13 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.baidu.speech.APP_ID"
-            android:value="10721288" />
+            android:value="19584052" />
         <meta-data
             android:name="com.baidu.speech.API_KEY"
-            android:value="1hoZW66icR3oexRFbpX9mvosdIr4mkzO" />
+            android:value="5dFCYbV8j0g1PwORb0Bphk5Q" />
         <meta-data
             android:name="com.baidu.speech.SECRET_KEY"
-            android:value="ELZ5vce0V7bDWE8UwE2D3xGbPZa4Gtle" />
+            android:value="6Ipm51jhHcKhwBfutBIhCnTA9vk7f98y" />
 
         <service
             android:name="com.baidu.speech.VoiceRecognitionService"

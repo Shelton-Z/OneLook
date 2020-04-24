@@ -2,7 +2,6 @@ package com.shelton.onelook.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -56,22 +55,12 @@ public class RecognizeActivity extends AppCompatActivity implements EventListene
         asr = EventManagerFactory.create(this, "asr");
         asr.registerListener(this); //  EventListener 中 onEvent方法
         start();
-        startRecognize.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                startRecognize.setVisibility(View.INVISIBLE);
-                recordView.setVisibility(View.VISIBLE);
-                start();
-            }
+        startRecognize.setOnClickListener(v -> {
+            startRecognize.setVisibility(View.INVISIBLE);
+            recordView.setVisibility(View.VISIBLE);
+            start();
         });
-        closeWindow.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        closeWindow.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -159,7 +148,10 @@ public class RecognizeActivity extends AppCompatActivity implements EventListene
      * android 6.0 以上需要动态申请权限
      */
     private void initPermission() {
-        String permissions[] = {Manifest.permission.RECORD_AUDIO
+        String[] permissions = {Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
 
         ArrayList<String> toApplyList = new ArrayList<>();
@@ -167,15 +159,13 @@ public class RecognizeActivity extends AppCompatActivity implements EventListene
         for (String perm : permissions) {
             if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, perm)) {
                 toApplyList.add(perm);
-                // 进入到这里代表没有权限.
-
+                //进入到这里代表没有权限.
             }
         }
-        String tmpList[] = new String[toApplyList.size()];
+        String[] tmpList = new String[toApplyList.size()];
         if (!toApplyList.isEmpty()) {
             ActivityCompat.requestPermissions(this, toApplyList.toArray(tmpList), 123);
         }
-
     }
 
     @Override
@@ -197,24 +187,16 @@ public class RecognizeActivity extends AppCompatActivity implements EventListene
                 AlertDialog.Builder builder = new AlertDialog.Builder(RecognizeActivity.this);
                 builder.setTitle("警告");
                 builder.setMessage("当前应用缺少必要权限，请点击“设置”开启权限或点击“取消”关闭应用。");
-                builder.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setData(Uri.fromParts("package", RecognizeActivity.this.getPackageName(), null));
-                        RecognizeActivity.this.startActivity(intent);
-                    }
+                builder.setPositiveButton("设置", (dialog, which) -> {
+                    Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setData(Uri.fromParts("package", RecognizeActivity.this.getPackageName(), null));
+                    RecognizeActivity.this.startActivity(intent);
                 }).
-                        setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // TODO Auto-generated method stub
-                                RecognizeActivity.this.setResult(RESULT_CANCELED);
-                                RecognizeActivity.this.finish();
-                            }
+                        setNegativeButton("取消", (dialog, which) -> {
+                            // TODO Auto-generated method stub
+                            RecognizeActivity.this.setResult(RESULT_CANCELED);
+                            RecognizeActivity.this.finish();
                         });
 
                 AlertDialog dialog = builder.show();
