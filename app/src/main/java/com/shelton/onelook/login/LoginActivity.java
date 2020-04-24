@@ -52,38 +52,27 @@ public class LoginActivity extends SwipeBackActivity implements LoginRegisterCon
         dialog = new LoadingDialog(this, "登录中");
         presenter = new LoginRegisterPresenter(this);
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        close.setOnClickListener(v -> finish());
+
+        login.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(account.getText()) || TextUtils.isEmpty(password.getText())) {
+                Toast.makeText(LoginActivity.this, "账户或密码不能为空！", Toast.LENGTH_SHORT).show();
+                return;
             }
+//                dialog.show();
+            presenter.login(account.getText().toString(), password.getText().toString());
         });
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(account.getText()) || TextUtils.isEmpty(password.getText())) {
-                    Toast.makeText(LoginActivity.this, "账户或密码不能为空！", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                dialog.show();
-                presenter.login(account.getText().toString(), password.getText().toString());
-            }
+
+        registerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            intent.putExtra("type", 0);
+            startActivity(intent);
         });
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                intent.putExtra("type", 0);
-                startActivity(intent);
-            }
-        });
-        forgetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                intent.putExtra("type", 1);
-                startActivity(intent);
-            }
+
+        forgetButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            intent.putExtra("type", 1);
+            startActivity(intent);
         });
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
