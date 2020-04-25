@@ -93,7 +93,7 @@ public class DecompressionActivity extends SwipeBackActivity implements Decompre
         title.setText(handleFilePath);
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         decompressionManagerBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color",
-                "#474747")));
+                "#fb7299")));
         decompressionManagerBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

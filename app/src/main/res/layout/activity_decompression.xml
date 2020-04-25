@@ -9,7 +9,7 @@
         android:id="@+id/decompression_manager_bar_theme"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        tool:background="#474747">
+        tool:background="#fb7299">
 
         <Button
             android:id="@+id/decompression_manager_back"

@@ -49,7 +49,7 @@ public class HistoryAndLabelActivity extends SwipeBackActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        historyBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
+        historyBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
     }
 
 

@@ -139,7 +139,7 @@ public class DownloadRecordActivity extends SwipeBackActivity {
         downloadRecordList.setAdapter(adapter);
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         downloadRecordBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color",
-                "#474747")));
+                "#fb7299")));
 
         downloadRecordBack.setOnClickListener(new View.OnClickListener() {
             @Override

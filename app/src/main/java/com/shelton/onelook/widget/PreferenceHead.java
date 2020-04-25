@@ -49,7 +49,7 @@ public class PreferenceHead extends Preference {
         });
         View settingBarTheme = view.findViewById(R.id.setting_bar_theme);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        settingBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
+        settingBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
     }
 
     public void setOnBackButtonClickListener(View.OnClickListener onClickListener) {

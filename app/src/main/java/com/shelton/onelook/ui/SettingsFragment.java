@@ -59,7 +59,7 @@ public class SettingsFragment extends PreferenceFragment {
             if (preference.getKey().equals("restore_default")) {
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
                 editor.putString("text_size", "100");
-                editor.putString("theme_color", "#474747");
+                editor.putString("theme_color", "#fb7299");
                 editor.putStringSet("clear_cache", null);
                 editor.apply();
                 getActivity().finish();

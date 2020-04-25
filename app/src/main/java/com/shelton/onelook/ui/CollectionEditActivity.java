@@ -66,7 +66,7 @@ public class CollectionEditActivity extends SwipeBackActivity {
     private void initView() {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        collectionEditBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
+        collectionEditBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
         final Bitmap icon = getIntent().getParcelableExtra("icon");
         final String title = getIntent().getStringExtra("title");
         final String url = getIntent().getStringExtra("url");
@@ -111,7 +111,7 @@ public class CollectionEditActivity extends SwipeBackActivity {
      * android 6.0 以上需要动态申请权限
      */
     private void initPermission() {
-        String permissions[] = {
+        String[] permissions = {
                 Manifest.permission.INSTALL_SHORTCUT,
                 Manifest.permission.UNINSTALL_SHORTCUT
         };
@@ -125,7 +125,7 @@ public class CollectionEditActivity extends SwipeBackActivity {
 
             }
         }
-        String tmpList[] = new String[toApplyList.size()];
+        String[] tmpList = new String[toApplyList.size()];
         if (!toApplyList.isEmpty()) {
             ActivityCompat.requestPermissions(this, toApplyList.toArray(tmpList), 123);
         } else {

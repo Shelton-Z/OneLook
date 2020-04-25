@@ -180,8 +180,8 @@ public class MainActivity extends BaseActivity {
         if (webView != null) {
             webView.getSettings().setTextZoom(Integer.valueOf(preferences.getString("text_size", "100")));
         }
-        toolbar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
-        statusBar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
+        toolbar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
+        statusBar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
     }
 
 

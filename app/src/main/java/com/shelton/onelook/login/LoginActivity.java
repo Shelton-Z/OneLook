@@ -76,7 +76,7 @@ public class LoginActivity extends SwipeBackActivity implements LoginRegisterCon
         });
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        loginBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
+        loginBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
     }
 
 

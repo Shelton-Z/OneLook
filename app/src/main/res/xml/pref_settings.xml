@@ -18,7 +18,7 @@
     </com.shelton.onelook.widget.MingPreferenceCategory>
     <com.shelton.onelook.widget.MingPreferenceCategory>
         <ListPreference
-            android:defaultValue="#474747"
+            android:defaultValue="#fb7299"
             android:dialogTitle="选择一项"
             android:entries="@array/color_name"
             android:entryValues="@array/color_value"

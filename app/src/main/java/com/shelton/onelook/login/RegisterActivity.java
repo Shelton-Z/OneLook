@@ -50,7 +50,7 @@ public class RegisterActivity extends SwipeBackActivity implements LoginRegister
         ButterKnife.bind(this);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        registerBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
+        registerBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         /*
          * type=0 注册 type=1 修改密码

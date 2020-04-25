@@ -90,7 +90,7 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
 
     private void initView() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        queryBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#474747")));
+        queryBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
         adapter = new QueryListAdapter(this, data);
         adapter.setOnFillingClickListener(new QueryListAdapter.OnFillingClickListener() {
             @Override
