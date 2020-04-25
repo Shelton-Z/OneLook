@@ -2,8 +2,9 @@
 <html>
 <head>
     <title>One Look</title>
-    <meta content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes, charset=utf-8"
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"
           name="viewport"/>
+    <meta charset="utf-8"/>
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
     </script>
 </head>
@@ -39,14 +40,20 @@
   }
   #lunbo{
     text-align: center;
-  }
-  #lunbo p{
+}
+.text{
     text-align: center;
     font-size: 25px;
     color: cadetblue;
     font-family: fantasy;
-  }
-  .imgBox{
+    width: 200px;
+    height: 114px;
+    top: 12px;
+    display: inline-block;
+    position: relative;
+}
+
+.imgBox{
     border-top: 2px solid cadetblue;
     width: 200px;
     height: 150px;
@@ -70,8 +77,10 @@
 
 <body background="background.jpg">
 <div id="lunbo">
-    <p>神一样的少年呀！</p>
-    <p>每天都是美美的！</p>
+    <div class="text">
+        神一样的少年呀！每天都是美美的！
+    </div>
+
     <div class="imgBox">
         <img alt="1" class="img-slide img1"
              src="https://cn.bing.com/th?id=OHR.FalklandRockhoppers_ZH-CN5370686595_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp">
@@ -120,9 +129,10 @@
   setInterval(ChangeImg,3000);
 
   $(function(){
+    //图片
     $.ajax({
       type: "GET",
-        //接口
+      //接口
       url: "https://api.xygeng.cn/Bing/week/",
       dataType: "json",
       data: {},
@@ -135,8 +145,28 @@
         })
       }
     });
+    //格言
+    $.ajax({
+      type: "GET",
+        //接口
+        url: "http://api.tianapi.com/txapi/dictum/index?key=6452b5a9148a571421a29ae7d5d5c78c&num=1",
+        dataType: "json",
+        data: {},
+        success: function(data){
+          var data = JSON.stringify(data);
+          var text = eval(('('+data+')')).newslist[0];
+          console.log(text["content"]);
+          //200 * 114 25 * 16
+          len = text["content"].length;
+          if((400/len)>26)
+            t = 23;
+          else
+            t = 400/len;
+          $(".text").css('font-size',t + 'px');
+          $(".text").text(text["content"]);
+        }
+    });
   });
-
 
 </script>
 </html>
