@@ -2,14 +2,12 @@ package com.shelton.onelook.decompression;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -65,12 +63,7 @@ public class DecompressionActivity extends SwipeBackActivity implements Decompre
     private void initData() {
         mDialog = new ProgressDialog(this);
         mDialog.setCanceledOnTouchOutside(false);
-        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
+        mDialog.setOnCancelListener(dialog -> finish());
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mDialog.setTitle("正在解析压缩包");
         mDialog.setMessage("请稍等...");
@@ -94,29 +87,16 @@ public class DecompressionActivity extends SwipeBackActivity implements Decompre
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         decompressionManagerBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color",
                 "#fb7299")));
-        decompressionManagerBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        decompressionManagerBack.setOnClickListener(v -> finish());
         decompressionFileList.setAdapter(adapter);
-        decompressionFileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                presenter.resolveFileContent(type, handleFilePath, data.get(position));
-            }
-        });
+        decompressionFileList.setOnItemClickListener((parent, view, position, id) ->
+                presenter.resolveFileContent(type, handleFilePath, data.get(position)));
 
-        decompressionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.decompression(type, handleFilePath, FileUtil.getDirFromPath(handleFilePath) + File.separator +
+        decompressionButton.setOnClickListener(v ->
+                presenter.decompression(type, handleFilePath,
+                        FileUtil.getDirFromPath(handleFilePath) + File.separator +
                                 FileUtil.getFileNameNoEx(FileUtil.getFileNameFromPath(handleFilePath)),
-                        false);
-
-            }
-        });
+                        false));
     }
 
     @Override

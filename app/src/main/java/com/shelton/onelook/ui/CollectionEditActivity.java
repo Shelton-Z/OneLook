@@ -74,27 +74,20 @@ public class CollectionEditActivity extends SwipeBackActivity {
         collectionEditIcon.setImageBitmap(icon);
         collectionEditTitle.setText(title);
         collectionEditUrl.setText(url);
-        collectionEditBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        collectionEditBack.setOnClickListener(v -> finish());
+        collectionEditConfirm.setOnClickListener(v -> {
+            if (editToCollection.isChecked()) {
+                DaintyDBHelper.getDaintyDBHelper(CollectionEditActivity.this).
+                        updateCollectionTable(PictureUtil.bitmapToBytes(icon), url, title);
             }
-        });
-        collectionEditConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editToCollection.isChecked()) {
-                    DaintyDBHelper.getDaintyDBHelper(CollectionEditActivity.this).updateCollectionTable(PictureUtil.bitmapToBytes(icon), url, title);
+            if (editToDesktop.isChecked()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    initPermission();
+                else {
+                    addShortCut();
                 }
-                if (editToDesktop.isChecked()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                        initPermission();
-                    else {
-                        addShortCut();
-                    }
-                }
-                finish();
             }
+            finish();
         });
         editToCollection.setChecked(true);
     }

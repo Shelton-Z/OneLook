@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -18,7 +17,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -172,17 +170,16 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().register(this);
     }
 
-    @SuppressLint("SetTextI18n")
-    protected void onResume() {
-        super.onResume();
-
-        city.setText(preferences.getString("cityName", "未知城市"));
-        if (webView != null) {
-            webView.getSettings().setTextZoom(Integer.valueOf(preferences.getString("text_size", "100")));
+    private BroadcastReceiver refresh = new BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            WeatherInfoBean bean = (WeatherInfoBean) intent.getSerializableExtra("content");
+            assert bean != null;
+            now_temperature.setText(bean.getTemperature());
+            city.setText(bean.getCity());
         }
-        toolbar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
-        statusBar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
-    }
+    };
 
 
     @Override
@@ -209,20 +206,16 @@ public class MainActivity extends BaseActivity {
             }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        List<Bundle> bundles = new ArrayList<>();
-        for (WebViewFragment fragment : WebPageHelper.webpagelist) {
-            Bundle save = new Bundle();
-            WebView webView = fragment.getInnerWebView();
-            if (webView != null)
-                webView.saveState(save);
-            bundles.add(save);
+    @SuppressLint("SetTextI18n")
+    protected void onResume() {
+        super.onResume();
 
+        city.setText(preferences.getString("cityName", "未知城市"));
+        if (webView != null) {
+            webView.getSettings().setTextZoom(Integer.parseInt(preferences.getString("text_size", "100")));
         }
-        outState.putInt("web_page_count", WebPageHelper.webpagelist.size());
-        outState.putParcelableArrayList("web_page_bundle", (ArrayList<? extends Parcelable>) bundles);
+        toolbar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
+        statusBar.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
     }
 
     @Override
@@ -251,142 +244,36 @@ public class MainActivity extends BaseActivity {
         finish();
     }
 
+    @Override
+    protected void onSaveInstanceState(@NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        List<Bundle> bundles = new ArrayList<>();
+        for (WebViewFragment fragment : WebPageHelper.webpagelist) {
+            Bundle save = new Bundle();
+            WebView webView = fragment.getInnerWebView();
+            if (webView != null)
+                webView.saveState(save);
+            bundles.add(save);
+
+        }
+        outState.putInt("web_page_count", WebPageHelper.webpagelist.size());
+        outState.putParcelableArrayList("web_page_bundle", (ArrayList<? extends Parcelable>) bundles);
+    }
+
     @OnNeverAskAgain({Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public void weatherPermissionNeverAsk() {
         MyUtil.createDialog(MainActivity.this, "警告",
                 "当前应用缺少必要权限，请点击“设置”开启权限或点击“取消”关闭应用。",
-                "设置", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setData(Uri.fromParts("package", MainActivity.this.getPackageName(), null));
-                        MainActivity.this.startActivity(intent);
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-                        MainActivity.this.finish();
-                    }
+                "设置", (dialog, which) -> {
+                    Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setData(Uri.fromParts("package", MainActivity.this.getPackageName(), null));
+                    MainActivity.this.startActivity(intent);
+                }, (dialog, which) -> {
+                    //Need Auto-generated method stub
+                    MainActivity.this.finish();
                 });
-    }
-
-
-    private void initView(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            List<Bundle> bundles = savedInstanceState.getParcelableArrayList("web_page_bundle");
-            int count = savedInstanceState.getInt("web_page_count");
-            for (int i = 0; i < count; i++) {
-                WebViewFragment fragment = new WebViewFragment(bundles != null ? bundles.get(i) : null);
-                WebPageHelper.webpagelist.add(fragment);
-            }
-            initDot(count);
-        } else {
-            String url = getIntent().getStringExtra("shortcut_url");
-            Log.d("Main", "onCreate地址Path：" + url);
-            WebViewFragment fragment = new WebViewFragment(null, url);
-            WebPageHelper.webpagelist.add(fragment);
-            initDot(1);
-        }
-
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        menuAdapter = new MenuListAdapter(this);
-        listView.setAdapter(menuAdapter);
-
-        mViewPager.setOnLayoutClickListener(new MyViewPager.OnLayoutClickListener() {
-            @Override
-            public void onLayoutClick() {
-                ZoomChange(1);
-            }
-        });
-        ((ViewGroup) mViewPager.getParent()).setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return mViewPager.dispatchTouchEvent(event);
-            }
-        });
-        mViewPager.setPageMargin(MyUtil.dip2px(this, 45));
-        webpageAdapter = new WebPageAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(webpageAdapter);
-
-        mViewPager.setOffscreenPageLimit(5);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                indicator.getChildAt(firstPosition).setEnabled(false);
-                indicator.getChildAt(position).setEnabled(true);
-                firstPosition = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NotNull View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(@NotNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(@NotNull View drawerView) {
-                switch (selectMenuPosition) {
-                    case -1:
-                        startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 2);
-                        break;
-                    case 0:
-                        webView.loadUrl("http://dushu.m.baidu.com");
-                        break;
-                    case 1:
-                        webView.loadUrl("https://m.bilibili.com");
-                        break;
-                    case 2:
-                        webView.loadUrl("http://m.xinhuanet.com");
-                        break;
-                    case 3:
-                        //如果不是新的请求，getFavicon只能返回旧图，待修复
-                        Intent intent = new Intent(MainActivity.this, CollectionEditActivity.class);
-                        Bitmap icon = webView.getFavicon();
-                        if (icon == null)
-                            icon = BitmapFactory.decodeResource(getResources(), R.drawable.collection_icon_default);
-                        intent.putExtra("icon", icon);
-                        intent.putExtra("title", webView.getTitle());
-                        intent.putExtra("url", webView.getUrl());
-                        startActivity(intent);
-                        break;
-                    case 4:
-                        startActivityForResult(new Intent(MainActivity.this, DownloadRecordActivity.class), 1);
-                        break;
-                    case 5:
-                        startActivityForResult(new Intent(MainActivity.this, HistoryAndLabelActivity.class), 1);
-                        break;
-                    case 6:
-                        startActivity(new Intent(MainActivity.this, ConfigActivity.class));
-                        break;
-                }
-                selectMenuPosition = -2;
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
     }
 
     private void initDot(int count) {
@@ -536,19 +423,107 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetWebView(MingWebView webView) {
-        if (first) {
-            //调用代表为新添加的webview
-            MainActivity.this.webView = webView;
-            first = false;
+    @SuppressLint("ClickableViewAccessibility")
+    private void initView(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            List<Bundle> bundles = savedInstanceState.getParcelableArrayList("web_page_bundle");
+            int count = savedInstanceState.getInt("web_page_count");
+            for (int i = 0; i < count; i++) {
+                WebViewFragment fragment = new WebViewFragment(bundles != null ? bundles.get(i) : null);
+                WebPageHelper.webpagelist.add(fragment);
+            }
+            initDot(count);
+        } else {
+            String url = getIntent().getStringExtra("shortcut_url");
+            Log.d("Main", "onCreate地址Path：" + url);
+            WebViewFragment fragment = new WebViewFragment(null, url);
+            WebPageHelper.webpagelist.add(fragment);
+            initDot(1);
         }
 
-        webView.setOnScrollChangedCallback(new MingWebView.OnScrollChangedCallback() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        menuAdapter = new MenuListAdapter(this);
+        listView.setAdapter(menuAdapter);
+
+        mViewPager.setOnLayoutClickListener(() -> ZoomChange(1));
+        ((ViewGroup) mViewPager.getParent()).setOnTouchListener((v, event) -> mViewPager.dispatchTouchEvent(event));
+        mViewPager.setPageMargin(MyUtil.dip2px(this, 45));
+        webpageAdapter = new WebPageAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(webpageAdapter);
+
+        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onScroll(int dx, int dy) {
-                webLayout.scrollBy(0, dy);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                indicator.getChildAt(firstPosition).setEnabled(false);
+                indicator.getChildAt(position).setEnabled(true);
+                firstPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NotNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NotNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NotNull View drawerView) {
+                switch (selectMenuPosition) {
+                    case -1:
+                        startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 2);
+                        break;
+                    case 0:
+                        webView.loadUrl("http://dushu.m.baidu.com");
+                        break;
+                    case 1:
+                        webView.loadUrl("https://m.bilibili.com");
+                        break;
+                    case 2:
+                        webView.loadUrl("http://m.xinhuanet.com");
+                        break;
+                    case 3:
+                        //如果不是新的请求，getFavicon只能返回旧图，待修复
+                        Intent intent = new Intent(MainActivity.this, CollectionEditActivity.class);
+                        Bitmap icon = webView.getFavicon();
+                        if (icon == null)
+                            icon = BitmapFactory.decodeResource(getResources(), R.drawable.collection_icon_default);
+                        intent.putExtra("icon", icon);
+                        intent.putExtra("title", webView.getTitle());
+                        intent.putExtra("url", webView.getUrl());
+                        startActivity(intent);
+                        break;
+                    case 4:
+                        startActivityForResult(new Intent(MainActivity.this, DownloadRecordActivity.class), 1);
+                        break;
+                    case 5:
+                        startActivityForResult(new Intent(MainActivity.this, HistoryAndLabelActivity.class), 1);
+                        break;
+                    case 6:
+                        startActivity(new Intent(MainActivity.this, ConfigActivity.class));
+                        break;
+                }
+                selectMenuPosition = -2;
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
             }
         });
     }
@@ -707,15 +682,17 @@ public class MainActivity extends BaseActivity {
 
         }
     };
-    private BroadcastReceiver refresh = new BroadcastReceiver() {
-        @SuppressLint("SetTextI18n")
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            WeatherInfoBean bean = (WeatherInfoBean) intent.getSerializableExtra("content");
-            now_temperature.setText(bean.getTemperature());
-            city.setText(bean.getCity());
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetWebView(MingWebView webView) {
+        if (first) {
+            //调用代表为新添加的webview
+            MainActivity.this.webView = webView;
+            first = false;
         }
-    };
+
+        webView.setOnScrollChangedCallback((dx, dy) -> webLayout.scrollBy(0, dy));
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -727,17 +704,14 @@ public class MainActivity extends BaseActivity {
         if (DownloadHelper.downloadList.size() > 0) {
             MyUtil.createDialog(this, "退出提示",
                     "有下载任务正在进行，退出浏览器将删除临时下载文件，仍要退出？",
-                    "确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            for (DownloaderTask task : DownloadHelper.downloadList) {
-                                task.cancel(true);
-                                //noinspection ResultOfMethodCallIgnored
-                                new File(task.getFilePath()).delete();
-                            }
-                            DownloadHelper.downloadList.clear();
-                            MainActivity.super.onBackPressed();
+                    "确定", (dialog, which) -> {
+                        for (DownloaderTask task : DownloadHelper.downloadList) {
+                            task.cancel(true);
+                            //noinspection ResultOfMethodCallIgnored
+                            new File(task.getFilePath()).delete();
                         }
+                        DownloadHelper.downloadList.clear();
+                        MainActivity.super.onBackPressed();
                     }, null);
         } else {
             super.onBackPressed();

@@ -3,7 +3,6 @@ package com.shelton.onelook.ui;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -24,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,23 +86,16 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
         initView();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         queryBarTheme.setBackgroundColor(Color.parseColor(preferences.getString("theme_color", "#fb7299")));
         adapter = new QueryListAdapter(this, data);
-        adapter.setOnFillingClickListener(new QueryListAdapter.OnFillingClickListener() {
-            @Override
-            public void onFilling(String text) {
-                editText.setText(text);
-                editText.setSelection(text.length());
-            }
+        adapter.setOnFillingClickListener(text -> {
+            editText.setText(text);
+            editText.setSelection(text.length());
         });
-        adapter.setOnHeadClickListener(new QueryListAdapter.OnHeadClickListener() {
-            @Override
-            public void onClick() {
-                showNormalDialog();
-            }
-        });
+        adapter.setOnHeadClickListener(this::showNormalDialog);
         listView.setAdapter(adapter);
         queryEngine.setOnClickListener(this);
         voiceRecognition.setOnClickListener(this);
@@ -167,80 +158,64 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
                 searchAll("select * from " + DaintyDBHelper.QTB_NAME + " where queryNAME like '%" + editable.toString() + "%' order by queryTIME desc");
             }
         });
-        editText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (i == KeyEvent.KEYCODE_ENTER) {
-                    executeSearch(queryButton);
+        editText.setOnKeyListener((view, i, keyEvent) -> {
+            if (i == KeyEvent.KEYCODE_ENTER) {
+                executeSearch(queryButton);
+            }
+            return false;
+        });
+
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+
+            if (mInputMethodManager.isActive())
+                mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            QueryItemBean queryItemBean = data.get(i - 1);
+            insertOrUpdateTable(queryItemBean.getQueryNAME());
+            String value = queryItemBean.getQueryNAME();
+            Log.d("aaa", "value:" + value);
+            if (queryItemBean.getQueryTYPE().equals("url")) {
+                if (!value.contains("http://") && !value.contains("https://")) {
+                    value = "http://" + value;
                 }
-                return false;
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                if (mInputMethodManager.isActive())
-                    mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                QueryItemBean queryItemBean = data.get(i - 1);
-                insertOrUpdateTable(queryItemBean.getQueryNAME());
-                String value = queryItemBean.getQueryNAME();
-                Log.d("aaa", "value:" + value);
-                if (queryItemBean.getQueryTYPE().equals("url")) {
-                    if (!value.contains("http://") && !value.contains("https://")) {
-                        value = "http://" + value;
-                    }
-                } else {
-                    switch (currentEngine) {
-                        case BaiDu:
-                            value = "https://www.baidu.com/s?wd=" + value;
-                            break;
-                        case S360:
-                            value = "https://www.so.com/s?q=" + value;
-                            break;
-                        default:
-                            value = "http://cn.bing.com/search?q=" + value;
-                    }
+            } else {
+                switch (currentEngine) {
+                    case BaiDu:
+                        value = "https://www.baidu.com/s?wd=" + value;
+                        break;
+                    case S360:
+                        value = "https://www.so.com/s?q=" + value;
+                        break;
+                    default:
+                        value = "http://cn.bing.com/search?q=" + value;
                 }
-                Intent intent = new Intent();
-                intent.putExtra("currentUri", value);
-                setResult(RESULT_OK, intent);
-                finish();
             }
+            Intent intent = new Intent();
+            intent.putExtra("currentUri", value);
+            setResult(RESULT_OK, intent);
+            finish();
         });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        listView.setOnItemLongClickListener((adapterView, view, i, l) -> {
 
-                selectedItem = i;
-                int[] positions = new int[2];
-                view.getLocationOnScreen(positions);
-                deleteWindow.showAtLocation(view, Gravity.TOP | Gravity.END, 50, positions[1] + MyUtil.dip2px(QueryActivity.this, 60));
-                return true;
-            }
+            selectedItem = i;
+            int[] positions = new int[2];
+            view.getLocationOnScreen(positions);
+            deleteWindow.showAtLocation(view, Gravity.TOP | Gravity.END, 50, positions[1] + MyUtil.dip2px(QueryActivity.this, 60));
+            return true;
         });
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE && mInputMethodManager.isActive())
-                    mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                return false;
-            }
+        listView.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE && mInputMethodManager.isActive())
+                mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            return false;
         });
         @SuppressLint("InflateParams")
         View contentView = LayoutInflater.from(this).inflate(R.layout.query_item_delete_window, null);
         Button deleteButton = contentView.findViewById(R.id.deleteButton);
         deleteButton.setText("删除该条记录");
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteWindow.dismiss();
-                DaintyDBHelper.getDaintyDBHelper(QueryActivity.this).deleteTableItem(DaintyDBHelper.QTB_NAME, "where queryNAME='" + data.get(selectedItem - 1).getQueryNAME() + "'");
-                data.remove(selectedItem - 1);
-                adapter.notifyDataSetChanged();
-            }
+        deleteButton.setOnClickListener(view -> {
+            deleteWindow.dismiss();
+            DaintyDBHelper.getDaintyDBHelper(QueryActivity.this).deleteTableItem(DaintyDBHelper.QTB_NAME, "where queryNAME='" + data.get(selectedItem - 1).getQueryNAME() + "'");
+            data.remove(selectedItem - 1);
+            adapter.notifyDataSetChanged();
         });
         deleteWindow = new PopupWindow(contentView, MyUtil.dip2px(this, 120),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -305,13 +280,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void searchAll(final String sql) {
-        DaintyDBHelper.getDaintyDBHelper(this).searchQueryTable(sql, new DaintyDBHelper.OnSearchQueryTableListener() {
-            @Override
-            public void onResult(ArrayList<QueryItemBean> mQueryData) {
-                data.clear();
-                data.addAll(mQueryData);
-                adapter.notifyDataSetChanged();
-            }
+        DaintyDBHelper.getDaintyDBHelper(this).searchQueryTable(sql, mQueryData -> {
+            data.clear();
+            data.addAll(mQueryData);
+            adapter.notifyDataSetChanged();
         });
 
     }
@@ -327,13 +299,10 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
          * @setMessage 设置对话框消息提示
          * setXXX方法返回Dialog对象，因此可以链式设置属性
          */
-        MyUtil.createDialog(this, "删除提示", "确认清空输入记录？", "确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DaintyDBHelper.getDaintyDBHelper(QueryActivity.this).deleteTableItem(DaintyDBHelper.QTB_NAME, null);
-                data.clear();
-                adapter.notifyDataSetChanged();
-            }
+        MyUtil.createDialog(this, "删除提示", "确认清空输入记录？", "确定", (dialog, which) -> {
+            DaintyDBHelper.getDaintyDBHelper(QueryActivity.this).deleteTableItem(DaintyDBHelper.QTB_NAME, null);
+            data.clear();
+            adapter.notifyDataSetChanged();
         }, null);
     }
 
@@ -349,36 +318,28 @@ public class QueryActivity extends BaseActivity implements View.OnClickListener 
                 .setMargins(0, MyUtil.dip2px(this, 75), 0, 0)
                 .build();
         TextView duEngine = popupLayout.findViewById(R.id.baidu_engine);
-        duEngine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                queryEngine.setImageResource(R.drawable.baidu_icon);
-                currentEngine = BaiDu;
-                popupAgent.dismiss();
-            }
+        duEngine.setOnClickListener(v -> {
+            queryEngine.setImageResource(R.drawable.baidu_icon);
+            currentEngine = BaiDu;
+            popupAgent.dismiss();
         });
         TextView sEngine = popupLayout.findViewById(R.id.s360_engine);
-        sEngine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                queryEngine.setImageResource(R.drawable.s360_icon);
-                currentEngine = S360;
-                popupAgent.dismiss();
-            }
+        sEngine.setOnClickListener(v -> {
+            queryEngine.setImageResource(R.drawable.s360_icon);
+            currentEngine = S360;
+            popupAgent.dismiss();
         });
         TextView yingEngine = popupLayout.findViewById(R.id.biying_engine);
-        yingEngine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                queryEngine.setImageResource(R.drawable.biying_icon);
-                currentEngine = BiYing;
-                popupAgent.dismiss();
-            }
+        yingEngine.setOnClickListener(v -> {
+            queryEngine.setImageResource(R.drawable.biying_icon);
+            currentEngine = BiYing;
+            popupAgent.dismiss();
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_RECOGNIZE && resultCode == Activity.RESULT_OK) {
             String word = data.getStringExtra("result");
             editText.setText(word);

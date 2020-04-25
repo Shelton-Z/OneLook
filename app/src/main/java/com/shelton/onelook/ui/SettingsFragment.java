@@ -24,18 +24,11 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_settings);
-        ((PreferenceHead) findPreference("configHead")).setOnBackButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SettingsFragment.this.getActivity().finish();
-            }
-        });
-        findPreference("clear_cache").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                new ClearCacheTask(getActivity()).execute(newValue.toString());
-                return false;
-            }
+        ((PreferenceHead) findPreference("configHead")).setOnBackButtonClickListener(v ->
+                SettingsFragment.this.getActivity().finish());
+        findPreference("clear_cache").setOnPreferenceChangeListener((preference, newValue) -> {
+            new ClearCacheTask(getActivity()).execute(newValue.toString());
+            return false;
         });
     }
 

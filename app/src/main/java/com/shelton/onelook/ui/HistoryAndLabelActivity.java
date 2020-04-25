@@ -11,6 +11,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.shelton.onelook.R;
 import com.shelton.onelook.widget.SwipeBackActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +69,7 @@ public class HistoryAndLabelActivity extends SwipeBackActivity {
                 return tabTitle[position];
             }
 
+            @NotNull
             @Override
             public Fragment getItem(int position) {//从集合中获取对应位置的Fragment
                 return mFragments.get(position);
@@ -106,12 +109,9 @@ public class HistoryAndLabelActivity extends SwipeBackActivity {
 
             }
         });
-        historyLabelBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
+        historyLabelBack.setOnClickListener(v -> {
+            setResult(RESULT_CANCELED);
+            finish();
         });
     }
 

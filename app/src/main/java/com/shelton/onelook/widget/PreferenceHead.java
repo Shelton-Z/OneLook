@@ -23,7 +23,7 @@ public class PreferenceHead extends Preference {
         this(context, attrs, 0);
     }
 
-    public PreferenceHead(Context context, AttributeSet attrs, int defStyleAttr) {
+    private PreferenceHead(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
     }
@@ -38,13 +38,9 @@ public class PreferenceHead extends Preference {
     protected void onBindView(View view) {
         super.onBindView(view);
         Button btBack = view.findViewById(R.id.config_back);
-        btBack.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (onBackButtonClickListener != null) {
-                    onBackButtonClickListener.onClick(v);
-                }
+        btBack.setOnClickListener(v -> {
+            if (onBackButtonClickListener != null) {
+                onBackButtonClickListener.onClick(v);
             }
         });
         View settingBarTheme = view.findViewById(R.id.setting_bar_theme);
